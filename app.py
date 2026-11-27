@@ -12,11 +12,24 @@ from dotenv import load_dotenv
 from groq import Groq
 
 load_dotenv()
+import base64
+
+@st.cache_data
+def b64_img(path):
+    if not os.path.exists(path):
+        return ""
+    ext = os.path.splitext(path)[1].lower().lstrip(".")
+    mime = "image/jpeg" if ext in ("jpg", "jpeg") else f"image/{ext}"
+    with open(path, "rb") as f:
+        return f"data:{mime};base64,{base64.b64encode(f.read()).decode()}"
+
 st.set_page_config(page_title="Mad Studios", page_icon="🐙", layout="wide")
+st.markdown(f'<style>.stApp {{ background: url("{b64_img("static/bg.gif")}") center/cover no-repeat fixed !important; }}</style>', unsafe_allow_html=True)
 
 st.markdown("""
 <style>
 @import url('https://googleapis.com');
+.stApp { overflow-x: hidden; }
 
 .stApp { background: url("/app/static/bg.gif") center/cover no-repeat fixed !important; overflow-x: hidden; }
 header[data-testid="stHeader"], section[data-testid="stSidebar"] { display: none !important; }
@@ -120,7 +133,7 @@ if "active_tab" not in st.session_state:
     st.session_state["active_tab"] = "HOME"
 
 # Top-Left Clickable Avatar Menu
-av_src = "/app/static/custom_maddy.png" if os.path.exists("static/custom_maddy.png") else "/app/static/maddy.jpg"
+av_src = b64_img("static/custom_maddy.png") if os.path.exists("static/custom_maddy.png") else b64_img("static/maddy.jpg")
 st.markdown(f'<img src="{av_src}" class="maddy-avatar-pin">', unsafe_allow_html=True)
 with st.popover(" "):
     if st.button("HOME", use_container_width=True):
@@ -160,14 +173,16 @@ with top_r:
 active = st.session_state["active_tab"]
 
 if active == "HOME":
-    st.markdown("""
-    <img src="/app/static/seahorse.gif" class="blended-sea" style="top:34%; left:2%; width:115px;">
-    <img src="/app/static/dolphin.gif"  class="blended-sea" style="top:22%; left:10%; width:175px;">
-    <img src="/app/static/ray.gif"      class="blended-sea" style="top:15%; left:26%; width:135px;">
-    <img src="/app/static/crab.gif"     class="blended-sea" style="bottom:3%; left:4%; width:160px;">
-    <img src="/app/static/turtle.gif"   class="blended-sea" style="top:20%; right:18%; width:160px;">
-    <img src="/app/static/clam.gif"     class="blended-sea" style="bottom:3%; right:14%; width:140px;">
+    st.markdown(f"""
+    <img src="{b64_img('static/seahorse.gif')}" class="blended-sea" style="top:34%; left:2%; width:115px;">
+    <img src="{b64_img('static/dolphin.gif')}"  class="blended-sea" style="top:22%; left:10%; width:175px;">
+    <img src="{b64_img('static/ray.gif')}"      class="blended-sea" style="top:15%; left:26%; width:135px;">
+    <img src="{b64_img('static/crab.gif')}"     class="blended-sea" style="bottom:3%; left:4%; width:160px;">
+    <img src="{b64_img('static/turtle.gif')}"   class="blended-sea" style="top:20%; right:18%; width:160px;">
+    <img src="{b64_img('static/clam.gif')}"     class="blended-sea" style="bottom:3%; right:14%; width:140px;">
     """, unsafe_allow_html=True)
+        with octo_col:
+            st.markdown(f'<img src="{b64_img("static/octopus.gif")}" class="hero-octo">', unsafe_allow_html=True)
 
     _, hero_col, _ = st.columns([0.85, 2.3, 0.85])
     with hero_col:
