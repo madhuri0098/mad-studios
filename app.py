@@ -181,9 +181,7 @@ if active == "HOME":
     <img src="{b64_img('static/turtle.gif')}"   class="blended-sea" style="top:20%; right:18%; width:160px;">
     <img src="{b64_img('static/clam.gif')}"     class="blended-sea" style="bottom:3%; right:14%; width:140px;">
     """, unsafe_allow_html=True)
-        with octo_col:
-            st.markdown(f'<img src="{b64_img("static/octopus.gif")}" class="hero-octo">', unsafe_allow_html=True)
-
+   
     _, hero_col, _ = st.columns([0.85, 2.3, 0.85])
     with hero_col:
         st.markdown('<div class="mad-title">Mad Studios</div><div class="mad-sub">• Instant AI Bot •</div>', unsafe_allow_html=True)
@@ -191,7 +189,8 @@ if active == "HOME":
         with b_col:
             st.markdown('<div class="speech-bubble">Hi! I\'m Maddy\'s Octopus Bot 🐙<br>How can I help you create today?</div>', unsafe_allow_html=True)
         with octo_col:
-            st.markdown('<img src="/app/static/octopus.gif" class="hero-octo">', unsafe_allow_html=True)
+            st.markdown(f'<img src="{b64_img("static/octopus.gif")}" class="hero-octo">', unsafe_allow_html=True)
+
 
         if "chat_msgs" not in st.session_state:
             st.session_state["chat_msgs"] = []
