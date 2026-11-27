@@ -1,0 +1,7 @@
+streamlit
+python-dotenv
+groq
+fal-client
+httpx
+certifi
+gTTS
