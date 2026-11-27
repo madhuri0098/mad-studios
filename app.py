@@ -199,40 +199,63 @@ with top_r:
 active = st.session_state["active_tab"]
 
 if active == "HOME":
-    st.markdown(f"""
-    <img src="{b64_img('static/seahorse.gif')}" class="blended-sea" style="top:34%; left:2%; width:115px;">
-    <img src="{b64_img('static/dolphin.gif')}"  class="blended-sea" style="top:22%; left:10%; width:175px;">
-    <img src="{b64_img('static/ray.gif')}"      class="blended-sea" style="top:15%; left:26%; width:135px;">
-    <img src="{b64_img('static/crab.gif')}"     class="blended-sea" style="bottom:3%; left:4%; width:160px;">
-    <img src="{b64_img('static/turtle.gif')}"   class="blended-sea" style="top:20%; right:18%; width:160px;">
-    <img src="{b64_img('static/clam.gif')}"     class="blended-sea" style="bottom:3%; right:14%; width:140px;">
-    """, unsafe_allow_html=True)
-   
+    if "chat_msgs" not in st.session_state:
+        st.session_state["chat_msgs"] = []
+
     _, hero_col, _ = st.columns([0.85, 2.3, 0.85])
-    with hero_col:
-        st.markdown('<div class="mad-title">Mad Studios</div><div class="mad-sub">• Instant AI Bot •</div>', unsafe_allow_html=True)
-        b_col, octo_col, _ = st.columns([1.25, 1.15, 0.7])
-        with b_col:
-            st.markdown('<div class="speech-bubble">Hi! I\'m Maddy\'s Octopus Bot 🐙<br>How can I help you create today?</div>', unsafe_allow_html=True)
-        with octo_col:
-            st.markdown(f'<img src="{b64_img("static/octopus.gif")}" class="hero-octo">', unsafe_allow_html=True)
 
+    # 1. Clean Dedicated Chat Mode (Once user sends a message — NO floating animals!)
+    if st.session_state["chat_msgs"]:
+        with hero_col:
+            c_top1, c_top2 = st.columns([2.2, 1.0])
+            with c_top1:
+                st.markdown('<h3 style="margin-top:0.4rem;">🐙 Maddy\'s Octopus Bot</h3>', unsafe_allow_html=True)
+            with c_top2:
+                if st.button("← Back to Home", use_container_width=True):
+                    st.session_state["chat_msgs"] = []
+                    st.rerun()
 
-        if "chat_msgs" not in st.session_state:
-            st.session_state["chat_msgs"] = []
-        for m in st.session_state["chat_msgs"]:
-            with st.chat_message(m["role"], avatar="🐙" if m["role"] == "assistant" else "🎀"):
-                st.write(m["content"])
+            for m in st.session_state["chat_msgs"]:
+                with st.chat_message(m["role"], avatar="🐙" if m["role"] == "assistant" else "🎀"):
+                    st.write(m["content"])
 
-        if prompt := st.chat_input("Ask Maddy's Octopus Bot anything..."):
-            st.session_state["chat_msgs"].append({"role": "user", "content": prompt})
-            res = Groq(api_key=os.getenv("GROQ_KEY")).chat.completions.create(
-                model="openai/gpt-oss-20b",
-                messages=[{"role": "system", "content": "You are Maddy's cute Octopus Bot inside Mad Studios."}] + st.session_state["chat_msgs"]
-            )
-            st.session_state["chat_msgs"].append({"role": "assistant", "content": res.choices[0].message.content})
-            st.rerun()
+            if prompt := st.chat_input("Reply to Maddy's Octopus Bot..."):
+                st.session_state["chat_msgs"].append({"role": "user", "content": prompt})
+                res = Groq(api_key=os.getenv("GROQ_KEY")).chat.completions.create(
+                    model="openai/gpt-oss-20b",
+                    messages=[{"role": "system", "content": "You are Maddy's cute Octopus Bot inside Mad Studios."}] + st.session_state["chat_msgs"]
+                )
+                st.session_state["chat_msgs"].append({"role": "assistant", "content": res.choices.message.content})
+                st.rerun()
 
+    # 2. Playful Underwater Reef Home Hub (Before first message)
+    else:
+        st.markdown(f"""
+        <img src="{b64_img('static/seahorse.gif')}" class="blended-sea" style="top:34%; left:2%; width:115px;">
+        <img src="{b64_img('static/dolphin.gif')}"  class="blended-sea" style="top:22%; left:10%; width:175px;">
+        <img src="{b64_img('static/ray.gif')}"      class="blended-sea" style="top:15%; left:26%; width:135px;">
+        <img src="{b64_img('static/crab.gif')}"     class="blended-sea" style="bottom:3%; left:4%; width:160px;">
+        <img src="{b64_img('static/turtle.gif')}"   class="blended-sea" style="top:20%; right:18%; width:160px;">
+        <img src="{b64_img('static/clam.gif')}"     class="blended-sea" style="bottom:3%; right:14%; width:140px;">
+        """, unsafe_allow_html=True)
+
+        with hero_col:
+            st.markdown('<div class="mad-title">Mad Studios</div><div class="mad-sub">• Instant AI Bot •</div>', unsafe_allow_html=True)
+            b_col, octo_col, _ = st.columns([1.25, 1.15, 0.7])
+            with b_col:
+                st.markdown('<div class="speech-bubble">Hi! I\'m Maddy\'s Octopus Bot 🐙<br>How can I help you create today?</div>', unsafe_allow_html=True)
+            with octo_col:
+                st.markdown(f'<img src="{b64_img("static/octopus.gif")}" class="hero-octo">', unsafe_allow_html=True)
+
+            if prompt := st.chat_input("Ask Maddy's Octopus Bot anything..."):
+                st.session_state["chat_msgs"].append({"role": "user", "content": prompt})
+                res = Groq(api_key=os.getenv("GROQ_KEY")).chat.completions.create(
+                    model="openai/gpt-oss-20b",
+                    messages=[{"role": "system", "content": "You are Maddy's cute Octopus Bot inside Mad Studios."}] + st.session_state["chat_msgs"]
+                )
+                st.session_state["chat_msgs"].append({"role": "assistant", "content": res.choices.message.content})
+                st.rerun()
+                
 else:
     _, work_col, _ = st.columns([0.55, 2.9, 0.55])
     with work_col:
