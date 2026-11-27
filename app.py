@@ -24,7 +24,6 @@ def b64_img(path):
         return f"data:{mime};base64,{base64.b64encode(f.read()).decode()}"
 
 st.set_page_config(page_title="Mad Studios", page_icon="🐙", layout="wide")
-st.markdown(f'<style>.stApp {{ background: url("{b64_img("static/bg.gif")}") center/cover no-repeat fixed !important; }}</style>', unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -126,6 +125,13 @@ div[data-testid="stChatInput"] textarea { color: #6b0f2b !important; font-weight
 div[data-testid="stChatInput"] textarea::placeholder { color: #8e183b !important; opacity: 0.8 !important; }
 button[data-testid="stChatInputSubmitButton"] { background: #6b0f2b !important; border-radius: 50% !important; }
 button[data-testid="stChatInputSubmitButton"] svg { fill: #fce4ec !important; }
+</style>
+""", unsafe_allow_html=True)
+st.markdown(f"""
+<style>
+.stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] {{
+    background: url("{b64_img('static/bg.gif')}") center/cover no-repeat fixed !important;
+}}
 </style>
 """, unsafe_allow_html=True)
 
