@@ -5,3 +5,5 @@ fal-client
 httpx
 certifi
 gTTS
+edge-tts
+moviepy
