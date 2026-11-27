@@ -125,6 +125,26 @@ div[data-testid="stChatInput"] textarea { color: #6b0f2b !important; font-weight
 div[data-testid="stChatInput"] textarea::placeholder { color: #8e183b !important; opacity: 0.8 !important; }
 button[data-testid="stChatInputSubmitButton"] { background: #6b0f2b !important; border-radius: 50% !important; }
 button[data-testid="stChatInputSubmitButton"] svg { fill: #fce4ec !important; }
+/* Mobile Phone Responsive Adjustments */
+@media (max-width: 768px) {
+    .maddy-avatar-pin, div[data-testid="stPopover"] {
+        top: 10px !important; left: 10px !important;
+        width: 64px !important; height: 64px !important;
+    }
+    div[data-testid="stPopover"] button {
+        width: 64px !important; height: 64px !important; min-height: 64px !important;
+    }
+    div[data-testid="stHorizontalBlock"] div[data-testid="stPopover"] {
+        position: fixed !important; top: 18px !important; right: 12px !important; left: auto !important;
+        width: auto !important; height: auto !important; z-index: 9999 !important;
+    }
+    .mad-title { font-size: 2.35rem !important; margin-top: 2.6rem !important; position: relative; z-index: 5; }
+    .mad-sub { font-size: 0.95rem !important; position: relative; z-index: 5; }
+    .speech-bubble { margin-top: 0.6rem !important; padding: 0.7rem 0.9rem !important; font-size: 0.92rem !important; position: relative; z-index: 5; }
+    .hero-octo { width: 130px !important; display: block; margin: 0 auto !important; position: relative; z-index: 5; }
+    .blended-sea { transform: scale(0.55); opacity: 0.85; z-index: 1 !important; }
+}
+
 </style>
 """, unsafe_allow_html=True)
 st.markdown(f"""
