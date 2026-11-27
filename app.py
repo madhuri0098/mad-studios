@@ -253,7 +253,7 @@ if active == "HOME":
                     model="openai/gpt-oss-20b",
                     messages=[{"role": "system", "content": "You are Maddy's cute Octopus Bot inside Mad Studios."}] + st.session_state["chat_msgs"]
                 )
-                st.session_state["chat_msgs"].append({"role": "assistant", "content": res.choices.message[0].content})
+                st.session_state["chat_msgs"].append({"role": "assistant", "content": res.choices[0].message.content})
                 st.rerun()
                 
 else:
